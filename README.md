@@ -114,3 +114,13 @@ MANEJO DE AMBIGÜEDAD Y CASOS FUERA DE ALCANCE:
 
 ### 6.3 Red de Seguridad Global (`Error Trigger`)
 ![Alerta de Fallo Técnico](capturas/fallo-tecnico.png)
+
+## 7. Guía de Despliegue e Importación del Workflow
+
+Para replicar y ejecutar esta automatización en cualquier instancia de **n8n Cloud** utilizando el archivo exportado de este repositorio:
+
+1. **Descargar el flujo:** Descarga el archivo [`workflow-agente-rag.json`](workflow-agente-rag.json) ubicado en la raíz de este repositorio.
+2. **Importar en n8n:** Crea un nuevo flujo de trabajo en n8n, haz clic en el menú de los tres puntos (**...**) en la esquina superior derecha y selecciona **Import from File** (Importar desde archivo) eligiendo el archivo `.json` descargado.
+3. **Vincular credenciales:** Abre los nodos de **Google Gemini** (`Chat Model` y `Embeddings`), **Google Sheets** y **Gmail** para asociar tus propias credenciales seguras desde el gestor nativo de n8n.
+4. **Inicializar la base vectorial (RAG):** Ejecuta una única vez el nodo inferior **Simple Vector Store** (*Insert Documents*) presionando **Test step** (Probar paso) para indexar las políticas de NubeLogística S.A. en memoria bajo la clave `politicas_nubelogistica`.
+5. **Activar en producción:** Enciende el interruptor superior derecho pasando el flujo a estado **Active** (Activo) y envía las peticiones `POST` hacia la **Production URL** (URL de producción) del nodo **Webhook**.
