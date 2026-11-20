@@ -70,3 +70,34 @@ Para resolver el triaje post-venta de NubeLogística S.A., implementar un nodo d
 ### 3.2 Por qué no alcanzaba con una consulta estática o reglas fijas (`If` tradicionales)
 1. **Variabilidad del lenguaje humano:** Un cliente puede reportar un daño físico escribiendo *"la caja llegó golpeada"*, *"el producto vino roto"* o *"abrieron el paquete en el camino"*. Una consulta estática por palabras clave fallaría, mientras que el agente junto con los **Embeddings** (`text-embedding-004`) comprende la intención semántica y aplica la Regla 4 automáticamente.
 2. **Detección de ambigüedad contextual:** Ante mensajes incompletos (ej. *"tengo un problema, ayúdenme"*), un flujo estático generaría un error o enviaría una respuesta genérica incorrecta. El **AI Agent** evalúa que carece de contexto suficiente y activa autónomamente la ruta `ACLARACION` para solicitar los datos faltantes antes de comprometer recursos de la empresa.
+
+## 4. Manejo de Errores y Casos Límite
+
+El diseño del flujo contempla **tres puntos críticos donde la operación puede fallar** y establece mecanismos automáticos de contención y recuperación para cada escenario:
+
+| Punto de Fallo / Caso Límite | Riesgo Operativo | Mecanismo de Control Implementado en n8n |
+| :--- | :--- | :--- |
+| **1. Número de guía inexistente o mal escrito por el cliente** | Que **Google Sheets** no devuelva resultados, deteniendo el flujo en silencio o provocando que el LLM alucine una respuesta sin datos reales. | Se activó la opción **Always Output Data** en Google Sheets y se conectó un nodo **If** que evalúa si `numero_guia` no está vacío. Si no existe (rama `false`), se envía un correo automático pidiendo verificar el código sin consumir tokens de IA. |
+| **2. Reclamo ambiguo, incompleto o de alto riesgo (> 500 USD / daño físico)** | Que el agente apruebe compensaciones no autorizadas o responda de forma errónea ante falta de contexto. | Se definieron límites explícitos en el **System Prompt** junto con el **Structured Output Parser**. Ante mensajes confusos el agente emite `ACLARACION` (pidiendo más datos), y ante montos mayores a 500 USD o daños físicos emite `ESCALAR_HUMANO` para derivar a un supervisor. |
+| **3. Caída de la API de Google Gemini, *timeout* del Vector Store o respuesta nula** | Pérdida silenciosa de reclamos de clientes ante interrupciones externas de red o cuota de API. | Se implementó un sub-flujo global con el nodo **Error Trigger** (vinculado en *Workflow Settings*), que captura el fallo y dispara una alerta inmediata por **Gmail** a Soporte IT con el nombre del flujo y el detalle técnico del error.
+
+## 5. System Prompt Completo del Agente
+
+```text
+ROL: Eres el Coordinador Autónomo de Post-Venta de NubeLogística S.A.
+TONO: Profesional, empático, claro y resolutivo.
+ALCANCE Y HERRAMIENTAS: Tu única función es evaluar reclamos de envíos cruzando los datos reales del pedido con las políticas oficiales. SIEMPRE debes consultar primero la herramienta 'Simple Vector Store' antes de tomar una decisión.
+LO QUE PUEDES HACER: Aprobar cupones de descuento autorizados por política o informar estados de envío normales (decision: "RESOLVER_AUTO").
+LO QUE NO PUEDES HACER: No puedes inventar políticas, prometer reembolsos en efectivo, modificar direcciones de entrega ni aprobar compensaciones en envíos mayores a 500 USD o con reporte de robo/daño físico.
+MANEJO DE AMBIGÜEDAD Y CASOS FUERA DE ALCANCE:
+- Si el mensaje del cliente es confuso, incompleto o no explica el problema, elige decision: "ACLARACION" y solicita los datos faltantes con amabilidad.
+- Si el pedido supera los 500 USD, reporta daño/robo o plantea un tema legal/fuera de alcance, elige decision: "ESCALAR_HUMANO" para derivarlo a un supervisor sin prometer soluciones.
+```
+
+## 6. Evidencia Visual de Implementación y Ejecución
+
+### 6.1 Arquitectura Completa en el Lienzo (Canvas)
+![Canvas del Workflow NubeLogística](capturas/canvas-workflow.png)
+
+### 6.2 Ejecución Funcional Exitosa (End-to-End)
+![Ejecución Exitosa en n8n](capturas/ejecucion-exitosa.png)
