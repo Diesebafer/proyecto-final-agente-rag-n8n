@@ -96,8 +96,21 @@ MANEJO DE AMBIGÜEDAD Y CASOS FUERA DE ALCANCE:
 
 ## 6. Evidencia Visual de Implementación y Ejecución
 
-### 6.1 Arquitectura Completa en el Lienzo (Canvas)
+### 6.1 Arquitectura Completa y Base de Datos
 ![Canvas del Workflow NubeLogística](capturas/canvas-workflow.png)
+![Registros Operativos en Google Sheets](capturas/registros-clientes.png)
 
-### 6.2 Ejecución Funcional Exitosa (End-to-End)
-![Ejecución Exitosa en n8n](capturas/ejecucion-exitosa.png)
+### 6.2 Pruebas de Cobertura de Ramas (Switch)
+* **Caso 1 — Resolución Autónoma (`RESOLVER_AUTO`):**
+![Ejecución Exitosa Caso 1](capturas/ejecucion-exitosa-1.png)
+![Actualización de Estado en Sheets](capturas/envio-actualizado.png)
+
+* **Caso 2 — Escalamiento a Supervisor (`ESCALAR_HUMANO`):**
+![Ejecución Exitosa Caso 2](capturas/ejecucion-exitosa-2.png)
+![Correo de Derivación a Supervisor](capturas/derivacion.png)
+
+* **Caso 3 — Solicitud de Aclaración (`ACLARACION`):**
+![Ejecución Exitosa Caso 3](capturas/ejecucion-exitosa-3.png)
+
+### 6.3 Red de Seguridad Global (`Error Trigger`)
+![Alerta de Fallo Técnico](capturas/fallo-tecnico.png)
