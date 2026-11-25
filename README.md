@@ -97,16 +97,16 @@ MANEJO DE AMBIGÜEDAD Y CASOS FUERA DE ALCANCE:
 ## 6. Evidencia Visual de Implementación y Ejecución
 
 ### 6.1 Arquitectura Completa y Base de Datos
-![Canvas del Workflow NubeLogística](capturas/canvas-workflow.png)
+![Canvas del Workflow NubeLogística]
 ![Registros Operativos en Google Sheets](capturas/registros-clientes.png)
 
 ### 6.2 Pruebas de Cobertura de Ramas (Switch)
 * **Caso 1 — Resolución Autónoma (`RESOLVER_AUTO`):**
-![Ejecución Exitosa Caso 1](capturas/ejecucion-exitosa-1.png)
+![Ejecución Exitosa Caso 1]
 ![Actualización de Estado en Sheets](capturas/envio-actualizado.png)
 
 * **Caso 2 — Escalamiento a Supervisor (`ESCALAR_HUMANO`):**
-![Ejecución Exitosa Caso 2](capturas/ejecucion-exitosa-2.png)
+![Ejecución Exitosa Caso 2]
 ![Correo de Derivación a Supervisor](capturas/derivacion.png)
 
 * **Caso 3 — Solicitud de Aclaración (`ACLARACION`):**
