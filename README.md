@@ -107,7 +107,7 @@ MANEJO DE AMBIGÜEDAD Y CASOS FUERA DE ALCANCE:
 ![Correo de Derivación a Supervisor](capturas/derivacion.png)
 
 * **Caso 3 — Solicitud de Aclaración (`ACLARACION`):**
-![Ejecución Exitosa Caso 3](capturas/ejecucion-exitosa-3.png)
+![Ejecución Exitosa Caso 3](capturas/Aclaración.png)
 
 ### 6.3 Red de Seguridad Global (`Error Trigger`)
 ![Alerta de Fallo Técnico](capturas/fallo-tecnico.png)
